@@ -1,0 +1,15 @@
+#!/bin/bash
+[[ ! -d ./cups ]] && git clone https://github.com/apple/cups cups
+./configure				\
+	--build=x86_64-pc-linux-gnu	\
+	--host=aarch64-apple-darwin18.2	\
+	--disable-warnings-as-errors	\
+	--enable-headless-only		\
+	--with-jdk-variant=normal	\
+	--with-jvm-variants=minimal1	\
+	--with-cups-include		\
+	--disable-precompiled-headers	\
+	--with-cups-include=$PWD/cups	\
+	--with-sys-root=/mnt/storage/homebrew-marauder/toolchain/SDK/	\
+	--with-tools-dir=/		\
+	--with-boot-jdk=/usr/lib/jvm/java-11-openjdk-amd64
