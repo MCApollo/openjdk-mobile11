@@ -120,7 +120,7 @@ inline void JavaThread::set_pending_async_exception(oop e) {
   set_has_async_exception();
 }
 
-#if defined(PPC64) || defined (AARCH64)
+//#if defined(PPC64) || defined (AARCH64) || (defined(__APPLE__) && defined(__aarch64__))
 inline JavaThreadState JavaThread::thread_state() const    {
   return (JavaThreadState) OrderAccess::load_acquire((volatile jint*)&_thread_state);
 }
@@ -128,7 +128,7 @@ inline JavaThreadState JavaThread::thread_state() const    {
 inline void JavaThread::set_thread_state(JavaThreadState s) {
   OrderAccess::release_store((volatile jint*)&_thread_state, (jint)s);
 }
-#endif
+//#endif
 
 inline void JavaThread::set_done_attaching_via_jni() {
   _jni_attach_state = _attached_via_jni;

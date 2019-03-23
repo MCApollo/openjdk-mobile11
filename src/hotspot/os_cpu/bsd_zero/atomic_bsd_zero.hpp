@@ -159,6 +159,7 @@ static inline int arm_lock_test_and_set(int newval, volatile int *ptr) {
 }
 #endif // ARM
 
+
 template<size_t byte_size>
 struct Atomic::PlatformAdd
   : Atomic::AddAndFetch<Atomic::PlatformAdd<byte_size> >
@@ -185,6 +186,28 @@ inline D Atomic::PlatformAdd<4>::add_and_fetch(I add_value, D volatile* dest,
 #endif // ARM
 }
 
+//#ifndef AARCH64
+#ifdef AARCH64
+template<>
+template<typename I, typename D>
+inline D Atomic::PlatformAdd<8>::add_and_fetch(I add_value, D volatile* dest,
+                                               atomic_memory_order order) const {
+  STATIC_ASSERT(8 == sizeof(I));
+  STATIC_ASSERT(8 == sizeof(D));
+  D val;
+  int tmp;
+  __asm__ volatile(
+    "1:\n\t"
+    " ldaxr %[val], [%[dest]]\n\t"
+    " add %[val], %[val], %[add_val]\n\t"
+    " stlxr %w[tmp], %[val], [%[dest]]\n\t"
+    " cbnz %w[tmp], 1b\n\t"
+    : [val] "=&r" (val), [tmp] "=&r" (tmp)
+    : [add_val] "r" (add_value), [dest] "r" (dest)
+    : "memory");
+  return val;
+}
+#else
 template<>
 template<typename I, typename D>
 inline D Atomic::PlatformAdd<8>::add_and_fetch(I add_value, D volatile* dest,
@@ -194,6 +217,7 @@ inline D Atomic::PlatformAdd<8>::add_and_fetch(I add_value, D volatile* dest,
 
   return __sync_add_and_fetch(dest, add_value);
 }
+#endif
 
 template<>
 template<typename T>

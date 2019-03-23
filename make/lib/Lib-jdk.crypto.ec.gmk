@@ -49,6 +49,7 @@ ifeq ($(ENABLE_INTREE_EC), true)
       DISABLED_WARNINGS_microsoft := 4101 4244 4146 4018, \
       LDFLAGS := $(LDFLAGS_JDKLIB) $(LDFLAGS_CXX_JDK), \
       LDFLAGS_macosx := $(call SET_SHARED_LIBRARY_ORIGIN), \
+      LDFLAGS_ios := $(call SET_SHARED_LIBRARY_ORIGIN), \
       LIBS := $(LIBCXX), \
   ))
 

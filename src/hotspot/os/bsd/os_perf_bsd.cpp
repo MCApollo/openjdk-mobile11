@@ -26,7 +26,12 @@
 #include "memory/resourceArea.hpp"
 #include "runtime/os.hpp"
 #include "runtime/os_perf.hpp"
+#if TARGET_OS_IPHONE && AARCH64
+// zero is the config, it's a "fake" arch.
+#include "vm_version_ext_zero.hpp"
+#else
 #include "vm_version_ext_x86.hpp"
+#endif
 
 #ifdef __APPLE__
 #if ! TARGET_OS_IPHONE

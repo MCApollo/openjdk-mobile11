@@ -54,7 +54,8 @@ endif
 LIBFDLIBM_SRC := $(TOPDIR)/src/java.base/share/native/libfdlibm
 LIBFDLIBM_CFLAGS := -I$(LIBFDLIBM_SRC)
 
-ifneq ($(OPENJDK_TARGET_OS), macosx)
+#ifneq ($(OPENJDK_TARGET_OS), macosx)
+ifneq (,$(filter $(OPENJDK_TARGET_OS), macosx ios))
   $(eval $(call SetupNativeCompilation, BUILD_LIBFDLIBM, \
       NAME := fdlibm, \
       TYPE := STATIC_LIBRARY, \
@@ -141,6 +142,7 @@ $(eval $(call SetupJdkLibrary, BUILD_LIBJAVA, \
     LDFLAGS := $(LDFLAGS_JDKLIB) \
         $(call SET_SHARED_LIBRARY_ORIGIN), \
     LDFLAGS_macosx := -L$(SUPPORT_OUTPUTDIR)/native/$(MODULE)/, \
+    LDFLAGS_ios := -L$(SUPPORT_OUTPUTDIR)/native/$(MODULE)/, \
     LDFLAGS_windows := -delayload:shell32.dll, \
     LIBS_unix := -ljvm -lverify, \
     LIBS_linux := $(LIBDL) $(BUILD_LIBFDLIBM), \
@@ -150,6 +152,10 @@ $(eval $(call SetupJdkLibrary, BUILD_LIBJAVA, \
         -framework CoreFoundation \
         -framework Foundation \
         -framework Security -framework SystemConfiguration, \
+    LIBS_ios := $(BUILD_LIBFDLIBM) \
+        -framework CoreFoundation \
+        -framework Foundation \
+        -framework Security, \
     LIBS_windows := jvm.lib $(BUILD_LIBFDLIBM) $(WIN_VERIFY_LIB) \
         shell32.lib delayimp.lib \
         advapi32.lib version.lib, \
@@ -285,6 +291,7 @@ $(eval $(call SetupJdkLibrary, BUILD_LIBJLI, \
     LIBS_solaris := $(LIBDL), \
     LIBS_aix := $(LIBDL),\
     LIBS_macosx := -framework Cocoa -framework Security -framework ApplicationServices, \
+    LIBS_ios := -framework Security, \
     LIBS_windows := advapi32.lib comctl32.lib user32.lib, \
 ))
 
@@ -313,6 +320,7 @@ ifeq ($(OPENJDK_TARGET_OS), windows)
   TARGETS += $(BUILD_LIBJLI_STATIC)
 
 else ifeq ($(OPENJDK_TARGET_OS), macosx)
+#else ifeq (,$(filter $(OPENJDK_TARGET_OS), macosx ios))
   #
   # On macosx they do partial (incremental) linking of libjli_static.a
   # code it here...rather than add support to NativeCompilation
@@ -330,14 +338,14 @@ else ifeq ($(OPENJDK_TARGET_OS), macosx)
       OBJECT_DIR := $(SUPPORT_OUTPUTDIR)/native/$(MODULE)/libjli_static, \
   ))
 
-  ifeq ($(STATIC_BUILD), true)
-    TARGETS += $(BUILD_LIBJLI_STATIC)
-  else
+#  ifeq ($(STATIC_BUILD), true)
+#    TARGETS += $(BUILD_LIBJLI_STATIC)
+#  else
     $(SUPPORT_OUTPUTDIR)/native/$(MODULE)/libjli_static.a: $(BUILD_LIBJLI_STATIC)
 	$(call install-file)
 
     TARGETS += $(SUPPORT_OUTPUTDIR)/native/$(MODULE)/libjli_static.a
-  endif
+#  endif
 
 else ifeq ($(OPENJDK_TARGET_OS), aix)
   # AIX also requires a static libjli because the compiler doesn't support '-rpath'

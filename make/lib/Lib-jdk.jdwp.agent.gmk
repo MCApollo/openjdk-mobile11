@@ -63,6 +63,7 @@ $(eval $(call SetupJdkLibrary, BUILD_LIBJDWP, \
     LIBS_linux := $(LIBDL), \
     LIBS_solaris := $(LIBDL), \
     LIBS_macosx := -liconv, \
+    LIBS_ios := -liconv, \
     LIBS_aix := -liconv, \
 ))
 

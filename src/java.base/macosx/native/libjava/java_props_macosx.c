@@ -56,7 +56,7 @@
 #include <objc/objc.h>
 #include <objc/message.h>
 #include <CoreFoundation/CoreFoundation.h>
-#include <CoreFoundation/CFlocale.h>
+#include <CoreFoundation/CFLocale.h>
 
 char *getPosixLocale(int cat) {
     char *lc = setlocale(cat, NULL);
@@ -544,6 +544,32 @@ void setProxyProperties(java_props_t *sProps) {
 }
 // TARGET_OS_IPHONE
 #else
+
+// java_props_md.c -> #ifdef MACOSX
+// This is undefined without this.
+#include <Foundation/Foundation.h>
+static char *createUTF8CString(const CFStringRef theString) {
+    if (theString == NULL) return NULL;
+
+    const CFIndex stringLength = CFStringGetLength(theString);
+    const CFIndex bufSize = CFStringGetMaximumSizeForEncoding(stringLength, kCFStringEncodingUTF8) + 1;
+    char *returnVal = (char *)malloc(bufSize);
+
+    if (CFStringGetCString(theString, returnVal, bufSize, kCFStringEncodingUTF8)) {
+        return returnVal;
+    }
+
+    free(returnVal);
+    return NULL;
+}
+
+void setUserHome(java_props_t *sprops) {
+    if (sprops == NULL) { return; }
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    sprops->user_home = createUTF8CString((CFStringRef)NSHomeDirectory());
+    [pool drain];
+}
+// end
 
 PreferredToolkit getPreferredToolkit() {
     return HToolkit;

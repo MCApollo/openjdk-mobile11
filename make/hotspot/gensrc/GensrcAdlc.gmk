@@ -25,6 +25,13 @@
 
 $(eval $(call IncludeCustomExtension, hotspot/gensrc/GensrcAdlc.gmk))
 
+HOTSPOT_TARGET_OS = bsd
+HOTSPOT_TARGET_OS_TYPE = posix
+
+HOTSPOT_TARGET_CPU = zero
+HOTSPOT_TARGET_CPU_ARCH = zero
+HOTSPOT_TARGET_CPU_DEFINE = AARCH64
+
 ifeq ($(call check-jvm-feature, compiler2), true)
 
   ADLC_SUPPORT_DIR := $(JVM_SUPPORT_DIR)/adlc
@@ -93,7 +100,8 @@ ifeq ($(call check-jvm-feature, compiler2), true)
     ADLCFLAGS += -DSOLARIS=1 -DSPARC_WORKS=1
   else ifeq ($(OPENJDK_TARGET_OS), aix)
     ADLCFLAGS += -DAIX=1
-  else ifeq ($(OPENJDK_TARGET_OS), macosx)
+#  else ifeq ($(OPENJDK_TARGET_OS), macosx)
+  else ifeq (,$(filter $(OPENJDK_TARGET_OS), macosx ios))
     ADLCFLAGS += -D_ALLBSD_SOURCE=1 -D_GNU_SOURCE=1
   endif
 

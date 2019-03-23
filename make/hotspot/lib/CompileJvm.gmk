@@ -155,7 +155,7 @@ $(eval $(call SetupNativeCompilation, BUILD_LIBJVM, \
     EXCLUDE_FILES := $(JVM_EXCLUDE_FILES), \
     EXCLUDE_PATTERNS := $(JVM_EXCLUDE_PATTERNS), \
     EXTRA_OBJECT_FILES := $(DTRACE_EXTRA_OBJECT_FILES), \
-    CFLAGS := $(JVM_CFLAGS), \
+    CFLAGS := $(JVM_CFLAGS) -I$(TOPDIR)/src/hotspot/cpu/$(HOTSPOT_TARGET_CPU_ARCH), \
     vm_version.cpp_CXXFLAGS := $(CFLAGS_VM_VERSION), \
     arguments.cpp_CXXFLAGS := $(CFLAGS_VM_VERSION), \
     DISABLED_WARNINGS_clang := tautological-compare, \
@@ -164,6 +164,7 @@ $(eval $(call SetupNativeCompilation, BUILD_LIBJVM, \
         1540-1088 1500-010, \
     ASFLAGS := $(JVM_ASFLAGS), \
     LDFLAGS := $(JVM_LDFLAGS), \
+    LDFLAGS_ios := -undefined dynamic_lookup, \
     LIBS := $(JVM_LIBS), \
     OPTIMIZATION := $(JVM_OPTIMIZATION), \
     OBJECT_DIR := $(JVM_OUTPUTDIR)/objs, \

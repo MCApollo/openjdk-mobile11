@@ -25,7 +25,8 @@
 
 include JdkNativeCompilation.gmk
 
-ifeq ($(OPENJDK_TARGET_OS), macosx)
+#ifeq ($(OPENJDK_TARGET_OS), macosx)
+ifeq (,$(filter $(OPENJDK_TARGET_OS), macosx ios))
   ORIGIN_ARG := $(call SET_EXECUTABLE_ORIGIN)
 else
   ifeq ($(OPENJDK_TARGET_OS), windows)
@@ -51,7 +52,8 @@ ifeq ($(TOOLCHAIN_TYPE), gcc)
   LAUNCHER_CFLAGS += -fvisibility=hidden
   LDFLAGS_JDKEXE += -Wl,--exclude-libs,ALL
 else ifeq ($(TOOLCHAIN_TYPE), clang)
-  ifneq ($(OPENJDK_TARGET_OS), macosx)
+#  ifneq ($(OPENJDK_TARGET_OS), macosx) 
+  ifneq (,$(filter $(OPENJDK_TARGET_OS), macosx ios))
     LAUNCHER_CFLAGS += -fvisibility=hidden
   endif
 else ifeq ($(TOOLCHAIN_TYPE), solstudio)
@@ -130,7 +132,8 @@ define SetupBuildLauncherBody
   endif
 
   $1_LIBS :=
-  ifeq ($(OPENJDK_TARGET_OS), macosx)
+#  ifeq ($(OPENJDK_TARGET_OS), macosx)
+  ifeq (,$(filter $(OPENJDK_TARGET_OS), macosx ios))
     ifeq ($$($1_MACOSX_SIGNED), true)
       $1_PLIST_FILE := Info-privileged.plist
         $1_CODESIGN := true
@@ -218,7 +221,7 @@ define SetupBuildLauncherBody
     TARGETS += $$($1)
   endif
 
-  ifneq (,$(filter $(OPENJDK_TARGET_OS), macosx aix))
+  ifneq (,$(filter $(OPENJDK_TARGET_OS), macosx ios aix))
     $$(BUILD_LAUNCHER_$1): $(SUPPORT_OUTPUTDIR)/native/java.base/libjli_static.a
   endif
 

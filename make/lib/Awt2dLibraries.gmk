@@ -139,11 +139,12 @@ ifeq ($(OPENJDK_TARGET_OS), windows)
       #
 endif
 
-ifneq ($(filter $(OPENJDK_TARGET_OS), solaris linux macosx aix), )
+ifneq ($(filter $(OPENJDK_TARGET_OS), solaris linux macosx aix ), )
   LIBAWT_EXFILES += awt_Font.c CUPSfuncs.c fontpath.c X11Color.c
 endif
 
 ifeq ($(OPENJDK_TARGET_OS), macosx)
+#ifeq (,$(filter $(OPENJDK_TARGET_OS), macosx ios))
   LIBAWT_EXFILES += initIDs.c awt/image/cvutils/img_colors.c
 endif
 
@@ -232,6 +233,7 @@ $(eval $(call SetupJdkLibrary, BUILD_LIBAWT, \
     ASFLAGS := $(LIBAWT_ASFLAGS), \
     LDFLAGS := $(LDFLAGS_JDKLIB) $(call SET_SHARED_LIBRARY_ORIGIN), \
     LDFLAGS_macosx := -L$(INSTALL_LIBRARIES_HERE), \
+    LDFLAGS_ios := -L$(INSTALL_LIBRARIES_HERE), \
     LDFLAGS_windows := -delayload:user32.dll -delayload:gdi32.dll \
         -delayload:shell32.dll -delayload:winmm.dll \
         -delayload:winspool.drv -delayload:imm32.dll \

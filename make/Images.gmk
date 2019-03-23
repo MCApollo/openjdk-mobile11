@@ -166,7 +166,8 @@ ifneq ($(OPENJDK_TARGET_OS), windows)
       MAN_SRC_DIR = $(MAN_SRC_BASEDIR)/solaris/doc
       MAN1_SUBDIR = sun/man/man1
     endif
-    ifeq ($(OPENJDK_TARGET_OS), macosx)
+#    ifeq ($(OPENJDK_TARGET_OS), macosx)
+    ifeq (,$(filter $(OPENJDK_TARGET_OS), macosx ios))
       MAN_SRC_DIR = $(MAN_SRC_BASEDIR)/bsd/doc
       MAN1_SUBDIR = man
     endif
@@ -197,7 +198,7 @@ ifneq ($(OPENJDK_TARGET_OS), windows)
 	$(install-file)
     endif
 
-    ifneq ($(findstring $(OPENJDK_TARGET_OS), linux macosx), )
+    ifneq ($(findstring $(OPENJDK_TARGET_OS), linux macosx ios), )
       $(JRE_IMAGE_DIR)/man/ja:
 	$(call LogInfo, Creating $(patsubst $(OUTPUTDIR)/%,%,$@))
 	$(CD) $(@D) && $(RM) ja && $(LN) -s ja_JP.UTF-8 ja
@@ -219,7 +220,7 @@ ifneq ($(OPENJDK_TARGET_OS), windows)
           $(addprefix $(JDK_IMAGE_DIR)/man/ja_JP.PCK/man1/, $(JDK_MAN_PAGES))
     endif
 
-    ifneq ($(findstring $(OPENJDK_TARGET_OS), linux macosx), )
+    ifneq ($(findstring $(OPENJDK_TARGET_OS), linux macosx ios), )
       JRE_MAN_PAGE_LIST = $(addprefix $(JRE_IMAGE_DIR)/man/man1/, $(JRE_MAN_PAGES)) \
           $(addprefix $(JRE_IMAGE_DIR)/man/ja_JP.UTF-8/man1/, $(JRE_MAN_PAGES)) \
           $(JRE_IMAGE_DIR)/man/ja
@@ -255,7 +256,8 @@ ifneq ($(filter jdk, $(MAKECMDGOALS)), )
       )
 
   ifeq ($(ZIP_EXTERNAL_DEBUG_SYMBOLS), true)
-    ifeq ($(OPENJDK_TARGET_OS), macosx)
+#    ifeq ($(OPENJDK_TARGET_OS), macosx)
+    ifeq (,$(filter $(OPENJDK_TARGET_OS), macosx ios))
       DEMO_FILES := $(call not-containing, .dSYM, $(DEMO_FILES))
     else
       DEMO_FILES := $(filter-out %.debuginfo %.pdb %.map, $(DEMO_FILES))
@@ -322,7 +324,8 @@ else
   DEBUGINFO_SUFFIXES := .debuginfo .pdb .map
   # On Macosx, if debug symbols have not been zipped, find all files inside *.dSYM
   # dirs.
-  ifeq ($(OPENJDK_TARGET_OS), macosx)
+#  ifeq ($(OPENJDK_TARGET_OS), macosx)
+  ifeq (,$(filter $(OPENJDK_TARGET_OS), macosx ios))
     $(eval $(call FillCacheFind, \
         $(SUPPORT_OUTPUTDIR)/modules_cmds $(SUPPORT_OUTPUTDIR)/modules_libs))
     FindDebuginfoFiles = \

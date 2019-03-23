@@ -1,15 +1,38 @@
 #!/bin/bash
 [[ ! -d ./cups ]] && git clone https://github.com/apple/cups cups
+# Only need the headers.
 ./configure				\
 	--build=x86_64-pc-linux-gnu	\
 	--host=aarch64-apple-darwin18.2	\
 	--disable-warnings-as-errors	\
 	--enable-headless-only		\
 	--with-jdk-variant=normal	\
-	--with-jvm-variants=minimal1	\
+	--with-jvm-variants=zero	\
 	--with-cups-include		\
 	--disable-precompiled-headers	\
 	--with-cups-include=$PWD/cups	\
 	--with-sys-root=/mnt/storage/homebrew-marauder/toolchain/SDK/	\
 	--with-tools-dir=/		\
 	--with-boot-jdk=/usr/lib/jvm/java-11-openjdk-amd64
+
+echo "cd build/*; make images"
+
+# MCApollo
+# Congrats, you're attempting to build this:
+# You found this so I'm guessing I should leave some notes while compiling.
+
+# Edit the spec.gmk and openjdk.gmk files after the configuration.
+# openjdk.gmk for me was configured wrong, leading to me wasting a day trying to fix compiler errors.
+# It was configured for the host, not the target like spec.gmk is.
+# COMPILER1 and COMPILER2 don't exist for bsd_zero, don't tear your hair out and find out at 3AM.
+
+# speck.jmk BUILD_CC BUILD_CXX BUILD_LD BUILD_LDXXX
+# should be your host's compiler tools, not the target.
+# adlc will fail to build if you don't fix this.
+# A copy of the edited configure script should be in build/.configure-support if it not in the commit.
+
+# Target is aarch64-apple-darwin18.2 because that's the triple with the toolchain.
+# Follow the directions listed on the openjdk's website about compiling for iOS.
+
+
+# Happy cross compiling, I spent 3 days wrapping my head around this. Hopefully this helps someone.
