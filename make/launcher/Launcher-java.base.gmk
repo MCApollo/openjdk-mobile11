@@ -25,7 +25,8 @@
 
 include LauncherCommon.gmk
 
-ifneq ($(OPENJDK_TARGET_OS),ios)
+#ifneq ($(OPENJDK_TARGET_OS),ios)
+ifneq ($(OPENJDK_TARGET_OS), XXX)
 
 $(eval $(call IncludeCustomExtension, launcher/Launcher-java.base.gmk))
 
@@ -47,6 +48,7 @@ $(eval $(call SetupBuildLauncher, java, \
     OPTIMIZATION := HIGH, \
     WINDOWS_STATIC_LINK := true, \
     NO_JAVA_MS := true, \
+    LDFLAGS := -L$(JDK_OUTPUTDIR)/lib/jli/ -ljli, \
 ))
 
 $(SUPPORT_OUTPUTDIR)/modules_cmds/java.base/java$(EXE_SUFFIX): $(BUILD_LAUNCHER_java)
@@ -92,7 +94,7 @@ endif
 
 ################################################################################
 
-ifneq ($(findstring $(OPENJDK_TARGET_OS), macosx solaris aix), )
+ifneq ($(findstring $(OPENJDK_TARGET_OS), macosx solaris aix ios), )
   $(eval $(call SetupJdkExecutable, BUILD_JSPAWNHELPER, \
       NAME := jspawnhelper, \
       SRC := $(TOPDIR)/src/$(MODULE)/unix/native/jspawnhelper, \

@@ -31,6 +31,7 @@
 #include "stack_zero.inline.hpp"
 #include "runtime/frame.inline.hpp"
 #include "utilities/align.hpp"
+#include "runtime/thread.inline.hpp" // -> thread_state() is undefined?
 
 // Inlined causes circular inclusion with thread.hpp
 ZeroStack::ZeroStack()

@@ -319,8 +319,8 @@ ifeq ($(OPENJDK_TARGET_OS), windows)
 
   TARGETS += $(BUILD_LIBJLI_STATIC)
 
-else ifeq ($(OPENJDK_TARGET_OS), macosx)
-#else ifeq (,$(filter $(OPENJDK_TARGET_OS), macosx ios))
+#else ifeq ($(OPENJDK_TARGET_OS), macosx)
+else ifeq (,$(filter $(OPENJDK_TARGET_OS), macosx ios))
   #
   # On macosx they do partial (incremental) linking of libjli_static.a
   # code it here...rather than add support to NativeCompilation

@@ -23,7 +23,8 @@
 # questions.
 #
 
-ifneq ($(OPENJDK_TARGET_OS),ios)
+#ifneq ($(OPENJDK_TARGET_OS),ios)
+ifneq ($(OPENJDK_TARGET_OS), XXX)
 
 include LauncherCommon.gmk
 
@@ -92,6 +93,7 @@ $(eval $(call SetupJdkExecutable, BUILD_UNPACKEXE, \
     CFLAGS_linux := -fPIC, \
     CFLAGS_solaris := -KPIC, \
     CFLAGS_macosx := -fPIC, \
+    CFLAGS_ios := -fPIC, \
     LDFLAGS := $(UNPACKEXE_ZIPOBJS) \
         $(LDFLAGS_JDKEXE) $(LDFLAGS_CXX_JDK) \
         $(call SET_SHARED_LIBRARY_ORIGIN), \

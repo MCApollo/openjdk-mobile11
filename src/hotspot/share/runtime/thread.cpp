@@ -136,6 +136,14 @@
 // Initialization after module runtime initialization
 void universe_post_module_init();  // must happen after call_initPhase2
 
+//inline JavaThreadState JavaThread::thread_state() const    {
+//  return (JavaThreadState) OrderAccess::load_acquire((volatile jint*)&_thread_state);
+//}
+
+//inline void JavaThread::set_thread_state(JavaThreadState s) {
+//  OrderAccess::release_store((volatile jint*)&_thread_state, (jint)s);
+//}
+
 #ifdef DTRACE_ENABLED
 
 // Only bother with this argument setup if dtrace is available

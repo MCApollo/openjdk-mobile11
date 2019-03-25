@@ -157,7 +157,8 @@ define SetupBuildLauncherBody
           -framework SystemConfiguration \
           -lstdc++ -liconv
     else
-      $1_LIBS += $(SUPPORT_OUTPUTDIR)/native/java.base/libjli_static.a
+#      $1_LIBS += $(SUPPORT_OUTPUTDIR)/native/java.base/libjli_static.a
+       $1_LIBS += -ljli
     endif
     $1_LIBS += -framework Cocoa -framework Security \
         -framework ApplicationServices
@@ -208,6 +209,7 @@ define SetupBuildLauncherBody
       LIBS_windows := $$($1_WINDOWS_JLI_LIB) \
           $(SUPPORT_OUTPUTDIR)/native/java.base/libjava/java.lib advapi32.lib \
           $$($1_LIBS_windows), \
+      LIBS_ios := -L$(JDK_OUTPUTDIR)/lib/jli -ljli, \
       OUTPUT_DIR := $$($1_OUTPUT_DIR), \
       VERSIONINFO_RESOURCE := $$($1_VERSION_INFO_RESOURCE), \
       EXTRA_RC_FLAGS := $$($1_EXTRA_RC_FLAGS), \
@@ -217,11 +219,11 @@ define SetupBuildLauncherBody
   ))
 
   $1 += $$(BUILD_LAUNCHER_$1)
-  ifneq ($(OPENJDK_TARGET_OS), ios)
+#  ifneq ($(OPENJDK_TARGET_OS), ios)
     TARGETS += $$($1)
-  endif
+#  endif
 
-  ifneq (,$(filter $(OPENJDK_TARGET_OS), macosx ios aix))
+  ifneq (,$(filter $(OPENJDK_TARGET_OS), macosx aix))
     $$(BUILD_LAUNCHER_$1): $(SUPPORT_OUTPUTDIR)/native/java.base/libjli_static.a
   endif
 

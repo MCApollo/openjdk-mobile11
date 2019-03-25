@@ -164,7 +164,7 @@ $(eval $(call SetupNativeCompilation, BUILD_LIBJVM, \
         1540-1088 1500-010, \
     ASFLAGS := $(JVM_ASFLAGS), \
     LDFLAGS := $(JVM_LDFLAGS), \
-    LDFLAGS_ios := -undefined dynamic_lookup, \
+    LDFLAGS_iosXXX := -undefined dynamic_lookup, \
     LIBS := $(JVM_LIBS), \
     OPTIMIZATION := $(JVM_OPTIMIZATION), \
     OBJECT_DIR := $(JVM_OUTPUTDIR)/objs, \

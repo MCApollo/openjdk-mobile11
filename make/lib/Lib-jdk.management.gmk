@@ -22,7 +22,8 @@
 # or visit www.oracle.com if you need additional information or have any
 # questions.
 #
-ifneq ($(OPENJDK_TARGET_OS), ios)
+#ifneq ($(OPENJDK_TARGET_OS), ios)
+ifneq ($(OPENJDK_TARGET_OS), XXX)
 
 
 include LibCommon.gmk
